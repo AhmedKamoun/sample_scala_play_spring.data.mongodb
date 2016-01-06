@@ -1,16 +1,20 @@
 package com.core.dom.admin
 
-import javax.persistence._
-
 import com.core.dom.MainEntity
+import org.springframework.data.mongodb.core.mapping.Document
 
-@Entity
+@Document
 class GroupAdmin extends MainEntity {
 
-  @Column(unique = true)
+  // @Column(unique = true)
   var name: String = _
 
   var description: String = _
 
+  def this(name_ : String, description_ : String) {
+    this()
+    name = name_
+    description = description_
 
+  }
 }

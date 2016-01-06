@@ -104,19 +104,19 @@ class SecuredController extends Controller {
 
       role match {
         case AdminRole.Sudo => {
-          Option(administratorRepository.findOneByPermissionIsAdmin(admin_id, requiredPermission, true)) match {
+          Option(administratorRepository.findByPermissionIsAdmin(admin_id, requiredPermission, true)) match {
             case Some(customerAdmin) => f(admin_id)(request)
             case None => play.api.mvc.Results.Unauthorized
           }
         }
         case AdminRole.Simple => {
-          Option(administratorRepository.findOneByPermissionIsAdmin(admin_id, requiredPermission, false)) match {
+          Option(administratorRepository.findByPermissionIsAdmin(admin_id, requiredPermission, false)) match {
             case Some(customerAdmin) => f(admin_id)(request)
             case None => play.api.mvc.Results.Unauthorized
           }
         }
         case AdminRole.All => {
-          Option(administratorRepository.findOneByPermission(admin_id, requiredPermission)) match {
+          Option(administratorRepository.findByPermission(admin_id, requiredPermission)) match {
             case Some(customerAdmin) => f(admin_id)(request)
             case None => play.api.mvc.Results.Unauthorized
           }

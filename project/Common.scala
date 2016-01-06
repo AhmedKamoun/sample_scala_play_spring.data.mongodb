@@ -4,33 +4,27 @@ import sbt._
 object Common {
   // Settings for the app, i.e. the root project
   val appSettings = settings(appName)
-  val spring_version = "4.1.7.RELEASE"
+  val spring_version = "4.2.4.RELEASE"
   val commonDependencies = Seq(
     // Add your project dependencies here,
-    "mysql" % "mysql-connector-java" % "5.1.10",
+    //  <!-- MongoDB database driver -->
+    "org.mongodb" % "mongo-java-driver" % "3.2.0",
+
     "org.springframework" % "spring-context" % spring_version,
-    "org.springframework" % "spring-orm" % spring_version,
-    "org.springframework" % "spring-jdbc" % spring_version,
     "org.springframework" % "spring-tx" % spring_version,
     "org.springframework" % "spring-test" % spring_version % "test",
     "org.springframework" % "spring-context-support" % spring_version,
-    "org.springframework.data" % "spring-data-jpa" % "1.9.0.RELEASE",
+    "org.springframework.data" % "spring-data-mongodb" % "1.8.2.RELEASE",
+    "org.springframework.data" % "spring-data-commons" % "1.11.2.RELEASE",
+
     "net.sf.ehcache" % "ehcache" % "2.10.0",
-    "org.hibernate" % "hibernate-entitymanager" % "4.3.6.Final",
-    "org.hibernate" % "hibernate-core" % "4.3.6.Final",
-    "org.hibernate" % "hibernate-ehcache" % "4.3.6.Final",
-    "org.hibernate" % "hibernate-validator" % "5.1.2.Final",
-    "org.hibernate.javax.persistence" % "hibernate-jpa-2.0-api" % "1.0.1.Final",
-    "org.jadira.usertype" % "usertype.jodatime" % "2.0.1",
-    "com.mysema.querydsl" % "querydsl-jpa" % "3.4.3",
-    "com.mysema.querydsl" % "querydsl-apt" % "3.4.3",
+    "joda-time" % "joda-time" % "2.9.1",
     "cglib" % "cglib" % "3.1",
     "c3p0" % "c3p0" % "0.9.1.2",
-    "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1",
-    "com.cloudinary" % "cloudinary-http42" % "1.2.1"
+    "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1"
   )
 
-  def appName = "Kamoun_Application"
+  def appName = "sample_scala_play_springIoC_spring data mongodb"
 
   // Settings for every service, i.e. for admin and web subprojects
   def serviceSettings(module: String) = moduleSettings(module) ++: Seq(
@@ -50,7 +44,7 @@ object Common {
   // Common settings for every project
   def settings(theName: String) = Seq(
     name := theName,
-    organization := "kamoun.org",
+    organization := "kiminix.org",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.11.4",
     doc in Compile <<= target.map(_ / "none"),

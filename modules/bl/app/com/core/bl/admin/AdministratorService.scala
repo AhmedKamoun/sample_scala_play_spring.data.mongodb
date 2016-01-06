@@ -1,4 +1,4 @@
-package com.core.service.admin
+package com.core.bl.admin
 
 import java.util.{List => JList}
 

@@ -1,4 +1,4 @@
-package com.core.service.utils
+package com.core.bl.utils
 
 import play.api.Logger
 

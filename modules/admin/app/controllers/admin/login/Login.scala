@@ -1,11 +1,13 @@
 package controllers.admin.login
 
-import java.util.{List => JList}
-
-import com.core.dal.admin.AccessPermissionRepository
-import com.core.service.admin.AdministratorService
-import com.core.service.utils.TokenService
+import com.core.bl.admin.AdministratorService
+import com.core.bl.utils.TokenService
+import com.core.dal.admin.{AccessPermissionRepository, AdministratorRepository}
+import com.core.dom.admin.{Administrator, GroupAdmin}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria._
+import org.springframework.data.mongodb.core.query.Query._
 import org.springframework.stereotype
 import play.api.Logger
 import play.api.data.Forms._
@@ -21,7 +23,11 @@ class Login extends SecuredController {
   @Autowired
   var adminService: AdministratorService = _
   @Autowired
+  var adminRepository: AdministratorRepository = _
+  @Autowired
   var accessPermissionRepository: AccessPermissionRepository = _
+  @Autowired
+  var mongoTemplate: MongoTemplate = _
 
   val logger: Logger = Logger(this.getClass())
 
@@ -43,7 +49,26 @@ class Login extends SecuredController {
     implicit request =>
       tokenService.getTokenClaim("admin_id") match {
         case Some(user_id) => Ok("you are already logged in!")
-        case None => Ok(views.html.login.login(login_form))
+        case None => {
+
+          adminRepository.deleteAll()
+          val admin = new Administrator
+          admin.email = "ahmed.kamoun@gmail.com"
+          admin.name = "Kamoun Ahmed"
+          admin.group = new GroupAdmin("G1", "first group")
+          adminRepository.save(admin)
+
+          //SEARCH
+          val result = mongoTemplate.findOne(query(where("email").is(admin.email)), classOf[Administrator])
+
+          Option(result) match {
+            case Some(admin) => Logger.debug("Hello! Im " + admin.name)
+            case None => Logger.debug("admin not found !")
+          }
+
+
+          Ok(views.html.login.login(login_form))
+        }
 
       }
 
