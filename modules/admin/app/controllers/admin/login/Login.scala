@@ -6,6 +6,7 @@ import com.core.dal.admin.{AccessPermissionRepository, AdministratorRepository}
 import com.core.dom.admin.{Administrator, GroupAdmin}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.{BasicQuery, Criteria}
 import org.springframework.data.mongodb.core.query.Criteria._
 import org.springframework.data.mongodb.core.query.Query._
 import org.springframework.stereotype
@@ -59,7 +60,11 @@ class Login extends SecuredController {
           adminRepository.save(admin)
 
           //SEARCH
-          val result = mongoTemplate.findOne(query(where("email").is(admin.email)), classOf[Administrator])
+          var criteria_builder: Criteria = where("")
+          //List of predicates => criteria
+          criteria_builder.andOperator(where("email").is(admin.email), where("email").exists(true))
+
+          val result = mongoTemplate.findOne(query(criteria_builder), classOf[Administrator])
 
           Option(result) match {
             case Some(admin) => Logger.debug("Hello! Im " + admin.name)

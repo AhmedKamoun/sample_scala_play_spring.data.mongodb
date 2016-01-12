@@ -2,7 +2,7 @@ package configuration
 
 import java.util.Arrays
 
-import com.mongodb.{MongoClient, MongoCredential, ServerAddress}
+import com.mongodb.{WriteConcern, MongoClient, MongoCredential, ServerAddress}
 import org.springframework.context.annotation.{Bean, Configuration}
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -19,7 +19,9 @@ class MongoConfiguration {
   }
 
   @Bean(name = Array("mongoTemplate")) def mongoTemplate: MongoTemplate = {
-    return new MongoTemplate(mongoClient, DATBASE_NAME)
+    var template = new MongoTemplate(mongoClient, DATBASE_NAME)
+    template.setWriteConcern(WriteConcern.ACKNOWLEDGED)
+    return template
   }
 
 }

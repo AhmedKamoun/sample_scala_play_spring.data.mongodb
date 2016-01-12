@@ -1,7 +1,6 @@
 package com.core.bl.admin
 
 import java.util.{List => JList}
-
 import com.core.dal.admin.AdministratorRepository
 import com.core.dom.admin.{AccessPermission, Administrator}
 import org.springframework.beans.factory.annotation.Autowired

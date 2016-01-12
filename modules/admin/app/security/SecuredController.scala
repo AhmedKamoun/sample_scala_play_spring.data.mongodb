@@ -18,27 +18,27 @@ class SecuredController extends Controller {
   var administratorRepository: AdministratorRepository = _
 
   /**
-   *
-   * @param request
-   * @return Retrieve the json web token from Authorization http request header.
-   */
+    *
+    * @param request
+    * @return Retrieve the json web token from Authorization http request header.
+    */
   private def getToken(request: RequestHeader) = request.headers.get(Http.HeaderNames.AUTHORIZATION)
 
   /**
-   * Return Forbidden if the user in not authenticated.
-   */
+    * Return Forbidden if the user in not authenticated.
+    */
   private def onUnauthorized(request: RequestHeader) = Results.Unauthorized.withHeaders(Http.HeaderNames.WWW_AUTHENTICATE -> "token not found in Authorization http request header")
 
   /**
-   * Action for authenticated users.
-   * Overloaded method to use the default body parser
-   */
+    * Action for authenticated users.
+    * Overloaded method to use the default body parser
+    */
   def IsAuthenticated(f: => String => Request[AnyContent] => Result) = IsAuthenticated[AnyContent](parse.anyContent)(f)
 
   /**
-   *
-   * Action  with parser body for authenticated users.
-   */
+    *
+    * Action  with parser body for authenticated users.
+    */
 
   def IsAuthenticated[A](b: BodyParser[A])(f: => String => Request[A] => Result) = {
 
@@ -85,10 +85,10 @@ class SecuredController extends Controller {
 
 
   /**
-   * This function check if a user has a specific permission and role
-   * Without body parser
-   * Overloaded method to use the default body parser
-   **/
+    * This function check if a user has a specific permission and role
+    * Without body parser
+    * Overloaded method to use the default body parser
+    **/
   def IsAuthorized(requiredPermission: AccessPermission, role: AdminRole = AdminRole.All)(f: => String => Request[AnyContent] => Result): EssentialAction = {
 
     IsAuthorized[AnyContent](parse.anyContent)(requiredPermission, role)(f)
@@ -96,9 +96,9 @@ class SecuredController extends Controller {
   }
 
   /**
-   *
-   * With body parser
-   **/
+    *
+    * With body parser
+    **/
   def IsAuthorized[A](b: BodyParser[A])(requiredPermission: AccessPermission, role: AdminRole)(f: => String => Request[A] => Result) = IsAuthenticated[A](b) {
     admin_id => request => {
 
